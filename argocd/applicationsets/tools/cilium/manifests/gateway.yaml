@@ -1,0 +1,26 @@
+# Gateway API
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: Gateway
+metadata:
+  name: cilium-gateway
+  namespace: kube-system
+spec:
+  gatewayClassName: cilium
+  addresses:
+    - type: IPAddress
+      value: 192.168.1.148
+  listeners:
+    - name: http
+      port: 80
+      protocol: HTTP
+      hostname: "*.horacio.cloud"
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: https
+      port: 443
+      protocol: HTTPS
+      hostname: "*.horacio.cloud"
+      allowedRoutes:
+        namespaces:
+          from: All

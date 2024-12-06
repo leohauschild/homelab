@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dog-page
+  namespace: dog-page
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dog-page
+  template:
+    metadata:
+      labels:
+        app: dog-page
+    spec:
+      containers:
+        - name: dog-page
+          image: leohauschild/dog-page:latest
+          ports:
+            - containerPort: 80

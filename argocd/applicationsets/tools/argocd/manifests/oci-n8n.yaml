@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: 8gears-registry-oci-n8n
+  namespace: argocd
+  labels:
+    argocd.argoproj.io/secret-type: repository
+stringData:
+  name: n8n-oci-repo
+  url: 8gears.container-registry.com/library
+  enableOCI: "true"
+  type: helm

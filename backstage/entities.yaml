@@ -1,0 +1,32 @@
+# https://backstage.io/docs/features/software-catalog/descriptor-format#kind-system
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: argocd
+  title: ArgoCD
+  description: |
+    ArgoCD is a declarative, GitOps continuous delivery tool for Kubernetes.
+    It allows you to manage your Kubernetes resources using Git as the source of truth.
+    This system contains all the ArgoCD applications that I run in my homelab.
+  links:
+    - url: https://argo.homelab.local
+      title: ArgoCD URL
+spec:
+  owner: group:homelab-admins
+  domain: homelab
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: argocd-k8s-resources
+  annotations:
+    github.com/project-slug: "leohauschild/homelab"
+    backstage.io/kubernetes-label-selector: "app.kubernetes.io/part-of=argocd"
+    argocd/app-name: argocd
+spec:
+  type: service
+  owner: group:homelab-admins
+  lifecycle: production
+  system: argocd
+  dependencies:
+    - argocd

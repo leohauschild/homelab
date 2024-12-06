@@ -1,0 +1,76 @@
+loki:
+  auth_enabled: false
+  commonConfig:
+    replication_factor: 1
+  storage:
+    type: "filesystem"
+  schemaConfig:
+    configs:
+      - from: 2024-01-01
+        store: tsdb
+        index:
+          prefix: loki_index_
+          period: 24h
+        object_store: filesystem # we're storing on filesystem so there's no real persistence here.
+        schema: v13
+  ingester:
+    chunk_encoding: snappy
+  tracing:
+    enabled: true
+  querier:
+    # Default is 4, if you have enough memory and CPU you can increase, reduce if OOMing
+    max_concurrent: 2
+deploymentMode: SingleBinary
+singleBinary:
+  replicas: 1
+  persistence:
+    enableStatefulSetAutoDeletePVC: true
+    enabled: true
+    size: 5Gi
+    storageClass: proxmox-csi-default
+  resources:
+    requests:
+      cpu: 0.1
+      memory: 100Mi
+
+chunksCache:
+  enabled: false
+
+resultsCache:
+  enabled: false
+
+backend:
+  replicas: 0
+read:
+  replicas: 0
+write:
+  replicas: 0
+
+ingester:
+  replicas: 0
+querier:
+  replicas: 0
+queryFrontend:
+  replicas: 0
+queryScheduler:
+  replicas: 0
+distributor:
+  replicas: 0
+compactor:
+  replicas: 0
+indexGateway:
+  replicas: 0
+bloomCompactor:
+  replicas: 0
+bloomGateway:
+  replicas: 0
+
+monitoring:
+  dashboards:
+    enabled: true
+
+  rules:
+    enabled: true
+
+  serviceMonitor:
+    enabled: true

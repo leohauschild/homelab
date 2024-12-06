@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dog-page-service
+  namespace: dog-page
+spec:
+  selector:
+    app: dog-page
+  ports:
+    - port: 80
+      targetPort: 80
+  type: ClusterIP

@@ -1,0 +1,5 @@
+# namespace dog-page
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dog-page

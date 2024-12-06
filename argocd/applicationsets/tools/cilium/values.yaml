@@ -1,0 +1,84 @@
+ipam:
+  mode: kubernetes
+
+kubeProxyReplacement: true
+
+gatewayAPI:
+  enabled: true
+
+bpf:
+  masquerade: true
+  hostLegacyRouting: true
+
+securityContext:
+  capabilities:
+    ciliumAgent:
+      - CHOWN
+      - KILL
+      - NET_ADMIN
+      - NET_RAW
+      - IPC_LOCK
+      - SYS_ADMIN
+      - SYS_RESOURCE
+      - DAC_OVERRIDE
+      - FOWNER
+      - SETGID
+      - SETUID
+
+    cleanCiliumState:
+      - NET_ADMIN
+      - SYS_ADMIN
+      - SYS_RESOURCE
+
+cgroup:
+  autoMount:
+    enabled: false
+  hostRoot: /sys/fs/cgroup
+
+l2announcements:
+  enabled: true
+  leaseDuration: 3s
+  leaseRenewDeadline: 1s
+  leaseRetryPeriod: 200ms
+
+externalIPs:
+  enabled: true
+
+k8sServiceHost: "localhost"
+k8sServicePort: 7445
+
+k8sClientRateLimit:
+  qps: 50 # default value
+  burst: 100 # default value
+
+prometheus:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+
+operator:
+  replicas: 1
+  prometheus:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+
+rollOutCiliumPods: true
+
+hubble:
+  ui:
+    enabled: true
+  metrics:
+    serviceMonitor:
+      enabled: true
+    enableOpenMetrics: true
+    enabled:
+      - dns
+      - drop
+      - tcp
+      - flow
+      - port-distribution
+      - icmp
+      - httpV2:exemplars=true;labelsContext=source_ip,source_namespace,source_workload,destination_ip,destination_namespace,destination_workload,traffic_direction
+  relay:
+    enabled: true

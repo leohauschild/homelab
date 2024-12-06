@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wedding-countdown
+  labels:
+    app: wedding-countdown
+  namespace: wedding-countdown
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wedding-countdown
+  template:
+    metadata:
+      labels:
+        app: wedding-countdown
+    spec:
+      containers:
+        - name: wedding-countdown
+          image: leohauschild/weddingcountdown:1.0.0
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 64Mi
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10

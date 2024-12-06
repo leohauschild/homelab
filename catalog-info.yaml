@@ -1,0 +1,12 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: homelab-repository
+  description: |
+    The Homelab repository is a collection of all the tools that I run in my homelab.
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+spec:
+  type: infrastructure
+  owner: group:lab-team
+  lifecycle: production

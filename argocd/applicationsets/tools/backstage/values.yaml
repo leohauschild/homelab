@@ -1,0 +1,134 @@
+global:
+  imagePullSecrets: ["docker-registry"]
+
+fullnameOverride: backstage
+
+serviceAccount:
+  create: true
+  name: backstage
+
+organization:
+  name: Homelab
+
+service:
+  type: LoadBalancer
+  ports:
+    backend: 80
+    name: http-backend
+    targetPort: backend
+
+commonLabels:
+  ciliumlbpolicy: default
+
+backstage:
+  revisionHistoryLimit: 5
+  image:
+    registry: docker.io
+    repository: leohauschild/backstage
+    tag: "0.0.4"
+  replicas: 1
+  resources:
+    limits:
+      memory: 500Mi
+    requests:
+      memory: 100Mi
+      cpu: 100m
+  extraEnvVarsSecrets:
+    - backstage-secrets
+
+  appConfig:
+    app:
+      title: Homelab Backstage
+      baseUrl: http://localhost:7007
+      environment: production
+    backend:
+      baseUrl: http://localhost:7007
+      listen:
+        port: 7007
+      csp:
+        connect-src: ["'self'", "http:", "https:"]
+        upgrade-insecure-requests: false
+        script-src:
+          - "'self'"
+          - "'unsafe-eval'"
+        img-src:
+          - "'self'"
+          - "data:"
+          - "https://img.shields.io"
+      cors:
+        origin: http://backstage.homelab.local
+        methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+        credentials: true
+      database:
+        client: pg
+        connection:
+          host: postgresql.postgresql.svc.cluster.local
+          user: postgres
+          password: ${POSTGRES_PASSWORD}
+          port: 5432
+          ssl: false
+        prefix: "backstage_plugin_"
+    permission:
+      enabled: true
+    auth:
+      environment: production
+      providers:
+        github:
+          production:
+            clientId: ${GITHUB_CLIENT_ID}
+            clientSecret: ${GITHUB_CLIENT_SECRET}
+            signIn:
+              resolvers:
+                - resolver: usernameMatchingUserEntityName
+
+    integrations:
+      github:
+        - host: github.com
+          token: ${GITHUB_TOKEN}
+
+    kubernetes:
+      #objectTypes: []
+      frontend:
+        podDelete:
+          enabled: true
+      serviceLocatorMethod:
+        type: "multiTenant"
+      clusterLocatorMethods:
+        - type: "config"
+          clusters:
+            - url: kubernetes.default.svc.cluster.local:443
+              name: talos-cluster
+              authProvider: "serviceAccount"
+              skipTLSVerify: false
+              skipMetricsLookup: true
+    techdocs:
+      builder: "local" # Alternatives - 'external'
+      generator:
+        runIn: "docker" # Alternatives - 'local'
+      publisher:
+        type: "local" # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
+
+    proxy:
+      "/argocd/api":
+        target: https://argocd-server.argocd.svc/api/v1/
+        changeOrigin: true
+        secure: false
+        headers:
+          Cookie:
+            $env: ${ARGOCD_AUTH_TOKEN}
+
+    catalog:
+      rules:
+        - allow:
+            - Component
+            - API
+            - Location
+            - Resource
+            - Template
+            - User
+            - Group
+            - System
+            - Domain
+      locations:
+        - type: url
+          target: https://github.com/leohauschild/homelab/blob/main/backstage/*.yaml

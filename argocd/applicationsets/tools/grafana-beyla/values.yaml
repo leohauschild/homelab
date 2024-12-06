@@ -1,0 +1,25 @@
+config:
+  data:
+    routes:
+      unmatched: heuristic
+    log_level: info
+    attributes:
+      kubernetes:
+        enable: true
+    ## to enable network metrics
+    network:
+      enable: true
+
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/path: "/metrics"
+  prometheus.io/port: "9090"
+service:
+  # -- whether to create a service for metrics
+  enabled: true
+serviceMonitor:
+  enabled: true
+
+env:
+  #OTEL_EXPORTER_OTLP_ENDPOINT: "http://grafana-tempo:4317"
+  OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: "http://grafana-tempo:4317"

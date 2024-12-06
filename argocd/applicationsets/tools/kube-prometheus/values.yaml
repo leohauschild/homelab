@@ -1,0 +1,47 @@
+defaultRules:
+  create: true
+  rules:
+    etcd: true
+    kubeControllerManager: true
+    kubeProxy: true
+    windows: false
+
+crds:
+  enabled: true
+
+kubeStateMetrics:
+  enabled: true
+
+prometheus:
+  enabled: true
+
+  prometheusSpec:
+    logLevel: info
+    scrapeInterval: "30s"
+    remoteWriteDashboards: true
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: "proxmox-csi-default"
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 7Gi
+
+kubelet:
+  serviceMonitor:
+    cAdvisorInterval: "30s"
+
+grafana:
+  enabled: false
+  forceDeployDashboards: true
+
+kube-state-metrics:
+  enabled: true
+
+  prometheus:
+    monitor:
+      enabled: true
+
+  selfMonitor:
+    enabled: true

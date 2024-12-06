@@ -1,0 +1,18 @@
+# -- Proxmox cluster config stored in secrets.
+existingConfigSecret: "proxmox-csi-cluster-config"
+
+storageClass:
+  - name: proxmox-csi-default
+    storage: local-lvm
+    reclaimPolicy: Retain
+    fstype: ext4
+    mountOptions:
+      - noatime
+    ssd: true
+    cache: writethrough
+
+nodeSelector:
+  node-role.kubernetes.io/control-plane: ""
+tolerations:
+  - key: node-role.kubernetes.io/control-plane
+    effect: NoSchedule

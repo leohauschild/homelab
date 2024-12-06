@@ -1,0 +1,36 @@
+mode: deployment
+
+image:
+  repository: otel/opentelemetry-collector-k8s
+
+# We only want one of these collectors - any more and we'd produce duplicate data
+replicaCount: 1
+
+presets:
+  # enables the k8sclusterreceiver and adds it to the metrics pipelines
+  clusterMetrics:
+    enabled: true
+  # enables the k8sobjectsreceiver to collect events only and adds it to the logs pipelines
+  kubernetesEvents:
+    enabled: true
+
+config:
+  exporters:
+    otlphttp/metrics:
+      endpoint: "http://mimir-gateway/otlp"
+      tls:
+        insecure: true
+    prometheusremotewrite:
+      endpoint: "http://mimir-gateway/api/v1/push"
+      tls:
+        insecure: true
+  processors:
+    batch:
+      timeout: 5s
+    k8sattributes: {}
+  service:
+    pipelines:
+      metrics:
+        receivers: [otlp, prometheus]
+        exporters: [otlphttp/metrics, prometheusremotewrite]
+        processors: [k8sattributes, batch, memory_limiter]

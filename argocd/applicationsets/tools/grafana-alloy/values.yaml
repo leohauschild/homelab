@@ -1,0 +1,8 @@
+config:
+  databases:
+    prometheus: http://kube-prometheus-kube-prome-prometheus:9090
+    loki: http://loki-stack-gateway/loki/api/v1/push
+
+alloy:
+  configMap:
+    content: |-

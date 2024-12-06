@@ -1,0 +1,103 @@
+#image:
+#  repository: n8nio/n8n
+#  tag: latest
+#  pullPolicy: Always
+#imagePullSecrets:
+#  - name: 8gears-registry-n8n
+
+image:
+  repository: docker.io/n8nio/n8n
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+main:
+  config:
+    n8n:
+      editor_base_url: https://n8n.horacio.cloud
+      log_level: "debug"
+      host: n8n.horacio.cloud
+      protocol: "https"
+      port: "443"
+      proxy_hops: "1"
+      secure_cookie: true
+      samesite_cookie: "lax"
+      metrics: true
+    webhook_url: https://n8n.horacio.cloud
+    executions_mode: queue
+    db:
+      type: postgresdb
+      postgresdb:
+        host: postgresql-n8n.postgresql.svc.cluster.local
+        user: postgres
+    queue:
+      health:
+        check:
+          active: true
+      bull:
+        redis:
+          host: n8n-valkey-primary
+          port: 6379
+  service:
+    port: 5678
+  secret:
+    n8n:
+      encryption_key: "useanotheronehere" # old one for bootstrapping
+  extraEnv: &extraEnv
+    DB_POSTGRESDB_PASSWORD:
+      valueFrom:
+        secretKeyRef:
+          name: postgresql-credentials-n8n
+          key: password
+  resources:
+    limits:
+      memory: 2048Mi
+    requests:
+      memory: 512Mi
+
+worker:
+  enabled: true
+  extraEnv: *extraEnv
+
+webhook:
+  enabled: true
+  extraEnv: *extraEnv
+  livenessProbe:
+    failureThreshold: 3
+    httpGet:
+      path: /healthz
+      port: 443
+      scheme: HTTP
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  readinessProbe:
+    failureThreshold: 3
+    httpGet:
+      path: /healthz
+      port: 443
+      scheme: HTTP
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+
+valkey:
+  enabled: true
+  global:
+    security:
+      allowInsecureImages: true
+  image:
+    repository: bitnamilegacy/valkey
+    tag: "8.0.2-debian-12-r6"
+  architecture: standalone
+  sentinel:
+    enabled: false
+  auth:
+    enabled: false
+  primary:
+    kind: Deployment
+    persistence:
+      enabled: false
+    resources:
+      requests:
+        memory: 256Mi
+        cpu: 100m

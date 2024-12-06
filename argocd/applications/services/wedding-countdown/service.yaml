@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: wedding-countdown
+  namespace: wedding-countdown
+  labels:
+    app: wedding-countdown
+spec:
+  type: ClusterIP
+  selector:
+    app: wedding-countdown
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80

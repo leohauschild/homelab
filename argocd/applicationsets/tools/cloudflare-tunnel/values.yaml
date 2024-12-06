@@ -1,0 +1,14 @@
+image:
+  repository: cloudflare/cloudflared
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+cloudflare:
+  tunnelName: "homelab"
+  secretName: "tunnel-credentials"
+
+  ingress:
+    - hostname: "*.horacio.cloud"
+      service: "http://cilium-gateway-cilium-gateway.kube-system"
+
+replicaCount: 1

@@ -1,0 +1,15 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: wedding-countdown-route
+  namespace: wedding-countdown
+spec:
+  parentRefs:
+    - name: cilium-gateway
+      namespace: kube-system
+  hostnames:
+    - wedding.horacio.cloud
+  rules:
+    - backendRefs:
+        - name: wedding-countdown
+          port: 80

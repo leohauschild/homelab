@@ -1,0 +1,14 @@
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: homelab
+  title: Homelab
+  description: |
+    The Homelab Domain is a collection of all the tools that I run in my homelab.
+  tags:
+    - homelab
+    - devops
+  annotations:
+    backstage.io/techdocs-ref: url:https://github.com/leohauschild/homelab/tree/main/backstage
+spec:
+  owner: group:homelab-admins

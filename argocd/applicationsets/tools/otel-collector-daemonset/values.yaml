@@ -1,0 +1,32 @@
+mode: daemonset
+
+image:
+  repository: otel/opentelemetry-collector-contrib
+
+presets:
+  # enables the k8sattributesprocessor and adds it to the traces, metrics, and logs pipelines
+  kubernetesAttributes:
+    enabled: true
+  # enables the kubeletstatsreceiver and adds it to the metrics pipelines
+  kubeletMetrics:
+    enabled: true
+  # Enables the filelogreceiver and adds it to the logs pipelines
+  logsCollection:
+    enabled: true
+  hostMetrics:
+    enabled: true
+
+config:
+  exporters:
+    otlphttp:
+      endpoint: "http://mimir-gateway/api/v1/push"
+      timeout: 30s
+      tls:
+        insecure: true
+
+  service:
+    pipelines:
+      metrics:
+        receivers: [otlp]
+        processors: [batch]
+        exporters: [otlphttp]

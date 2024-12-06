@@ -1,0 +1,129 @@
+configs:
+  # Foundations tools
+  - name: "argocd"
+    project: "default"
+    namespace: "argocd"
+    repoUrl: "https://argoproj.github.io/argo-helm"
+    chart: "argo-cd"
+    releaseName: "argocd"
+    targetRevision: "9.4.4"
+  - name: cert-manager
+    project: "default"
+    namespace: "cert-manager"
+    repoUrl: "https://charts.jetstack.io"
+    chart: "cert-manager"
+    releaseName: "cert-manager"
+    targetRevision: "1.19.1"
+  - name: "sealed-secrets"
+    project: "default"
+    namespace: "kube-system"
+    repoUrl: "https://bitnami-labs.github.io/sealed-secrets"
+    chart: "sealed-secrets"
+    releaseName: "sealed-secrets"
+    targetRevision: "2.17.0"
+  - name: proxmox-csi-plugin
+    project: "default"
+    namespace: "csi-proxmox"
+    repoUrl: "ghcr.io/sergelogvinov/charts"
+    chart: "proxmox-csi-plugin"
+    releaseName: "proxmox-csi-plugin"
+    targetRevision: "0.3.13"
+  - name: "cilium"
+    project: "default"
+    namespace: "kube-system"
+    repoUrl: "https://helm.cilium.io/"
+    chart: "cilium"
+    releaseName: "cilium"
+    targetRevision: "1.18.0"
+  - name: "cloudflare-tunnel"
+    project: "default"
+    namespace: "cloudflared"
+    repoUrl: "https://cloudflare.github.io/helm-charts"
+    chart: "cloudflare-tunnel"
+    releaseName: "cloudflare-tunnel"
+    targetRevision: "0.3.2"
+
+  # Backstage
+  - name: backstage
+    project: "default"
+    namespace: "backstage"
+    repoUrl: "https://backstage.github.io/charts"
+    chart: "backstage"
+    releaseName: "backstage"
+    targetRevision: "2.5.1"
+  - name: postgresql
+    project: "default"
+    namespace: "postgresql"
+    repoUrl: registry-1.docker.io/bitnamicharts
+    chart: postgresql
+    path: postgresql
+    releaseName: postgresql
+    targetRevision: 16.6.6
+
+  # Monitoring tools
+  - name: grafana
+    project: "default"
+    namespace: "monitoring"
+    repoUrl: "https://grafana.github.io/helm-charts"
+    chart: "grafana"
+    releaseName: "grafana"
+    targetRevision: "9.0.0"
+  #  - name: loki
+  #    project: "default"
+  #    namespace: "monitoring"
+  #    repoUrl: "https://grafana.github.io/helm-charts"
+  #    chart: "loki"
+  #    releaseName: "loki"
+  #    targetRevision: "6.25.1"
+  #  - name: grafana-alloy
+  #    project: "default"
+  #    namespace: "monitoring"
+  #    repoUrl: "https://grafana.github.io/helm-charts"
+  #    chart: "alloy"
+  #    releaseName: "grafana-alloy"
+  #    targetRevision: "0.12.0"
+  - name: kube-prometheus
+    project: "default"
+    namespace: "monitoring"
+    repoUrl: "https://prometheus-community.github.io/helm-charts"
+    chart: kube-prometheus-stack
+    releaseName: kube-prometheus
+    targetRevision: 77.5.0
+  - name: grafana-tempo
+    project: "default"
+    namespace: "monitoring"
+    repoUrl: "https://grafana.github.io/helm-charts"
+    chart: "tempo"
+    releaseName: "grafana-tempo"
+    targetRevision: "1.23.3"
+  - name: grafana-beyla
+    project: "default"
+    namespace: "monitoring"
+    repoUrl: "https://grafana.github.io/helm-charts"
+    chart: "beyla"
+    releaseName: "grafana-beyla"
+    targetRevision: "1.8.0"
+  #- name: opentelemetry-operator
+  #  project: "default"
+  #  namespace: "opentelemetry"
+  #  repoUrl: "https://open-telemetry.github.io/opentelemetry-helm-charts"
+  #  chart: "opentelemetry-operator"
+  #  releaseName: "opentelemetry-operator"
+  #  targetRevision: "0.99.0"
+
+  # N8n helm chart
+  - name: n8n
+    project: "default"
+    namespace: "n8n"
+    repoUrl: "8gears.container-registry.com/library"
+    chart: "n8n"
+    releaseName: "n8n"
+    targetRevision: "1.0.16"
+  - name: postgresql-n8n
+    project: "default"
+    namespace: "postgresql"
+    repoUrl: registry-1.docker.io/bitnamicharts
+    chart: postgresql
+    path: postgresql
+    releaseName: postgresql-n8n
+    targetRevision: 16.6.6
