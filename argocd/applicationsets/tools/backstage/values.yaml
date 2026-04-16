@@ -13,7 +13,7 @@ organization:
 service:
   type: LoadBalancer
   ports:
-    backend: 80
+    backend: 8080
     name: http-backend
     targetPort: backend
 
